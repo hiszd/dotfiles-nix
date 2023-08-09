@@ -7,10 +7,10 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.05";
   };
 
-  outputs = inputs@{ self, darwin, home-manager, nixpkgs, ... }:
+  outputs = inputs@{ self, home-manager, nixpkgs, ... }:
     let
       ### START OPTIONS ###
-      username = "<insert username>"; # should match your host username
+      username = "zion"; # should match your host username
       ### END OPTIONS ###
 
       ### START SYSTEMS ###
