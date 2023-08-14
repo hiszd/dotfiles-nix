@@ -3,44 +3,56 @@
 
   environment.systemPackages = with pkgs; [
     neovim
-    kitty
-    git
-    wget
-    ripgrep
-    chromium
-    gcc
-    nodejs_20
-    ocaml
-    opam
-    ocamlformat
-    ocamlPackages.ocaml-lsp
-    firefox-devedition-unwrapped
-    polkit_gnome
-    ffmpeg
-    viewnior
-    rofi
-    pavucontrol
-    xfce.thunar
-    starship
-    wl-clipboard
-    wf-recorder
-    swaybg
-    ffmpegthumbnailer
-    xfce.tumbler
-    playerctl
-    xfce.thunar-archive-plugin
-    wlogout
-    gtklock
-    lightdm
-    lightdm-slick-greeter
-    dunst
-    wofi
-    brightnessctl
-    hyprpicker
-    tmux
-    tmuxinator
-    home-manager
-  ];
+      kitty
+      git
+      wget
+      ripgrep
+      chromium
+      gcc
+      nodejs
+      ocaml
+      dune_3
+      opam
+      ocamlformat
+      firefox-devedition-unwrapped
+      polkit_gnome
+      ffmpeg
+      viewnior
+      rofi
+      pavucontrol
+      xfce.thunar
+      starship
+      wl-clipboard
+      wf-recorder
+      swaybg
+      ffmpegthumbnailer
+      xfce.tumbler
+      playerctl
+      xfce.thunar-archive-plugin
+      wlogout
+      gtklock
+      dunst
+      wofi
+      brightnessctl
+      hyprpicker
+      tmux
+      tmuxinator
+      home-manager
+      linuxKernel.packages.linux_zen.nvidia_x11
+      gparted
+      eww-wayland
+      sway
+      ] ++ ( with ocamlPackages;
+          [
+          ocaml
+          core
+          core_extended
+          findlib
+          utop
+          merlin
+          ocp-indent
+          ocaml-lsp
+          ]);
 
   fonts.fonts = with pkgs; [
     (nerdfonts.override { fonts = [ "FiraCode" ]; })
@@ -49,22 +61,22 @@
   services.xserver = {
     enable = true;
     displayManager = { 
-      defaultSession = "hyprland"; 
-      autoLogin.enable =  false;
-      lightdm = { 
-        enable = true; 
-        greeter = {
+      autoLogin = {
           enable = true;
-          name = "lightdm-slick-greeter";
+          user = "zion";
         };
-      }; 
     };
+    videoDrivers = [ "nvidia" ];
   };
+  hardware.opengl.enable = true;
+  hardware.nvidia.modesetting.enable = true;
+  programs.xwayland.enable = true;
 
-  # Set your time zone.
+# Set your time zone.
   time.timeZone = "America/Detroit";
+  time.hardwareClockInLocalTime = true;
 
-  # Select internationalisation properties.
+# Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
 
   i18n.extraLocaleSettings = {
@@ -82,17 +94,15 @@
   users.users.zion.shell = pkgs.fish;
   users.defaultUserShell = pkgs.fish;
 
-  # Allow unfree packages
+# Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
-
-  # add more system settings here
+# add more system settings here
   nix = {
     settings = {
       auto-optimise-store = true;
       builders-use-substitutes = true;
       experimental-features = [ "nix-command" "flakes" ];
-      # Enable the OpenSSH daemon.
       substituters = [
         "https://nix-community.cachix.org"
       ];
@@ -107,6 +117,7 @@
   programs.fish.enable = true;
   programs.hyprland = {
     enable = true;
+    nvidiaPatches = true;
     xwayland = {
       enable = true;
       hidpi = true;
@@ -116,4 +127,15 @@
     enable = true;
     defaultEditor = true;
   };
+
+  pkgs.runCommand "dots" {
+    buildInputs = [ pkgs.git ];
+  } ''
+    git clone --bare https://github.com/hiszd/.dot-files $HOME/.cfg
+    git --git-dir=$HOME/.cfg/ --work-tree=$HOME checkout main
+    git --git-dir=$HOME/.cfg/ --work-tree=$HOME config --local status.showUntrackedFiles no
+    git --git-dir=$HOME/.cfg/ --work-tree=$HOME submodule init
+    git --git-dir=$HOME/.cfg/ --work-tree=$HOME submodule update
+  ''
+
 }
