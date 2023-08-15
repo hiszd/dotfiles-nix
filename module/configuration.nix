@@ -1,58 +1,58 @@
-{inputs, pkgs, ...}:
+{inputs, pkgs, run-cmd, ...}:
 {
 
   environment.systemPackages = with pkgs; [
     neovim
-      kitty
-      git
-      wget
-      ripgrep
-      chromium
-      gcc
-      nodejs
-      ocaml
-      dune_3
-      opam
-      ocamlformat
-      firefox-devedition-unwrapped
-      polkit_gnome
-      ffmpeg
-      viewnior
-      rofi
-      pavucontrol
-      xfce.thunar
-      starship
-      wl-clipboard
-      wf-recorder
-      swaybg
-      ffmpegthumbnailer
-      xfce.tumbler
-      playerctl
-      xfce.thunar-archive-plugin
-      wlogout
-      gtklock
-      dunst
-      wofi
-      brightnessctl
-      hyprpicker
-      tmux
-      tmuxinator
-      home-manager
-      linuxKernel.packages.linux_zen.nvidia_x11
-      gparted
-      eww-wayland
-      sway
-      ] ++ ( with ocamlPackages;
-          [
-          ocaml
-          core
-          core_extended
-          findlib
-          utop
-          merlin
-          ocp-indent
-          ocaml-lsp
-          ]);
+    kitty
+    git
+    wget
+    ripgrep
+    chromium
+    gcc
+    nodejs
+    ocaml
+    dune_3
+    opam
+    ocamlformat
+    firefox-devedition-unwrapped
+    polkit_gnome
+    ffmpeg
+    viewnior
+    rofi
+    pavucontrol
+    xfce.thunar
+    starship
+    wl-clipboard
+    wf-recorder
+    swaybg
+    ffmpegthumbnailer
+    xfce.tumbler
+    playerctl
+    xfce.thunar-archive-plugin
+    wlogout
+    gtklock
+    dunst
+    wofi
+    brightnessctl
+    hyprpicker
+    tmux
+    tmuxinator
+    home-manager
+    linuxKernel.packages.linux_zen.nvidia_x11
+    gparted
+    eww-wayland
+    sway
+    ] ++ ( with ocamlPackages;
+      [
+        ocaml
+        core
+        core_extended
+        findlib
+        utop
+        merlin
+        ocp-indent
+        ocaml-lsp
+      ]);
 
   fonts.fonts = with pkgs; [
     (nerdfonts.override { fonts = [ "FiraCode" ]; })
@@ -128,14 +128,27 @@
     defaultEditor = true;
   };
 
-  pkgs.runCommand "dots" {
-    buildInputs = [ pkgs.git ];
-  } ''
-    git clone --bare https://github.com/hiszd/.dot-files $HOME/.cfg
-    git --git-dir=$HOME/.cfg/ --work-tree=$HOME checkout main
-    git --git-dir=$HOME/.cfg/ --work-tree=$HOME config --local status.showUntrackedFiles no
-    git --git-dir=$HOME/.cfg/ --work-tree=$HOME submodule init
-    git --git-dir=$HOME/.cfg/ --work-tree=$HOME submodule update
-  ''
+  # let
+  #   pkgs = import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/b05d2077ebe219f6a47825767f8bab5c6211d200.tar.gz") { };
+  #   foo = pkgs.
+
+  # run-cmd "bob" { pkgs.git } ''
+    # echo This is running
+    # git clone --bare https://github.com/hiszd/.dot-files $HOME/.cfg
+    # git --git-dir=$HOME/.cfg/ --work-tree=$HOME checkout main
+    # git --git-dir=$HOME/.cfg/ --work-tree=$HOME config --local status.showUntrackedFiles no
+    # git --git-dir=$HOME/.cfg/ --work-tree=$HOME submodule init
+    # git --git-dir=$HOME/.cfg/ --work-tree=$HOME submodule update
+  # ''
+
+  # pkgs.runCommand "dots" {
+  #   buildInputs = [ pkgs.git ];
+  # } ''
+  #   git clone --bare https://github.com/hiszd/.dot-files $HOME/.cfg
+  #   git --git-dir=$HOME/.cfg/ --work-tree=$HOME checkout main
+  #   git --git-dir=$HOME/.cfg/ --work-tree=$HOME config --local status.showUntrackedFiles no
+  #   git --git-dir=$HOME/.cfg/ --work-tree=$HOME submodule init
+  #   git --git-dir=$HOME/.cfg/ --work-tree=$HOME submodule update
+  # ''
 
 }
