@@ -17,12 +17,5 @@
     programs.neovim = {
       extraConfig = pkgs.lib.fileContents /home/zion/.config/nvim/init.lua;
     };
-
-    programs.git = {
-      enable = true;
-      userName  = "hiszd";
-      userEmail = "hiszd1@gmail.com";
-    };
-
   };
 }
