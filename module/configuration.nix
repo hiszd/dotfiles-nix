@@ -14,7 +14,7 @@
     dune_3
     opam
     ocamlformat
-    firefox-devedition-unwrapped
+    firefox
     polkit_gnome
     ffmpeg
     viewnior
@@ -38,10 +38,18 @@
     tmux
     tmuxinator
     home-manager
-    linuxKernel.packages.linux_zen.nvidia_x11
+    # linuxKernel.packages.linux_zen.nvidia_x11
     gparted
     eww-wayland
     sway
+    nerdfonts
+    pipewire
+    qpwgraph
+    qjackctl
+    mpv
+    mp4v2
+    openh264
+    ffmpegthumbnailer
     ] ++ ( with ocamlPackages;
       [
         ocaml
@@ -55,8 +63,18 @@
       ]);
 
   fonts.fonts = with pkgs; [
-    (nerdfonts.override { fonts = [ "FiraCode" ]; })
+  (nerdfonts.override { fonts = [ "FiraCode" ]; })
   ];
+
+  security.rtkit.enable = true;
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+    # If you want to use JACK applications, uncomment this
+    jack.enable = true;
+  };
 
   services.xserver = {
     enable = true;
@@ -66,11 +84,25 @@
           user = "zion";
         };
     };
-    videoDrivers = [ "nvidia" ];
+    # videoDrivers = [ "nvidia" ];
   };
   hardware.opengl.enable = true;
-  hardware.nvidia.modesetting.enable = true;
+  # hardware.nvidia.modesetting.enable = true;
   programs.xwayland.enable = true;
+
+  # nixpkgs.config.packageOverrides = pkgs: {
+  #   vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
+  # };
+  # hardware.opengl = {
+  #   enable = true;
+  #   extraPackages = with pkgs; [
+  #     intel-media-driver # LIBVA_DRIVER_NAME=iHD
+  #     vaapiIntel         # LIBVA_DRIVER_NAME=i965 (older but works better for Firefox/Chromium)
+  #     vaapiVdpau
+  #     libvdpau-va-gl
+  #     libva
+  #   ];
+  # };
 
 # Set your time zone.
   time.timeZone = "America/Detroit";
@@ -97,6 +129,13 @@
 # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
+  nixpkgs.config.vivaldi = {
+    proprietaryCodecs = true;
+    enableWideVine = true;
+  };
+
+
+
 # add more system settings here
   nix = {
     settings = {
@@ -104,9 +143,11 @@
       builders-use-substitutes = true;
       experimental-features = [ "nix-command" "flakes" ];
       substituters = [
+        "https://hyprland.cachix.org"
         "https://nix-community.cachix.org"
       ];
       trusted-public-keys = [
+        "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       ];
       trusted-users = [ "@wheel" ];
@@ -117,38 +158,16 @@
   programs.fish.enable = true;
   programs.hyprland = {
     enable = true;
-    nvidiaPatches = true;
-    xwayland = {
-      enable = true;
-      hidpi = true;
-    };
+    package = inputs.hyprland.packages.${pkgs.system}.hyprland;
+    enableNvidiaPatches = false;
+    # xwayland = {
+    #   enable = true;
+    #   hidpi = true;
+    # };
   };
+
   programs.neovim = {
     enable = true;
     defaultEditor = true;
   };
-
-  # let
-  #   pkgs = import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/b05d2077ebe219f6a47825767f8bab5c6211d200.tar.gz") { };
-  #   foo = pkgs.
-
-  # run-cmd "bob" { pkgs.git } ''
-    # echo This is running
-    # git clone --bare https://github.com/hiszd/.dot-files $HOME/.cfg
-    # git --git-dir=$HOME/.cfg/ --work-tree=$HOME checkout main
-    # git --git-dir=$HOME/.cfg/ --work-tree=$HOME config --local status.showUntrackedFiles no
-    # git --git-dir=$HOME/.cfg/ --work-tree=$HOME submodule init
-    # git --git-dir=$HOME/.cfg/ --work-tree=$HOME submodule update
-  # ''
-
-  # pkgs.runCommand "dots" {
-  #   buildInputs = [ pkgs.git ];
-  # } ''
-  #   git clone --bare https://github.com/hiszd/.dot-files $HOME/.cfg
-  #   git --git-dir=$HOME/.cfg/ --work-tree=$HOME checkout main
-  #   git --git-dir=$HOME/.cfg/ --work-tree=$HOME config --local status.showUntrackedFiles no
-  #   git --git-dir=$HOME/.cfg/ --work-tree=$HOME submodule init
-  #   git --git-dir=$HOME/.cfg/ --work-tree=$HOME submodule update
-  # ''
-
 }

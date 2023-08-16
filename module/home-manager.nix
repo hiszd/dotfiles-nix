@@ -1,11 +1,11 @@
 { pkgs, inputs, ... }:
 
 {
-  imports = [ "${inputs.home-manager}/nixos" ];
+  imports = [ <home-manager/nixos> ];
 
   # add home-manager user settings here
   home-manager.users.zion = {
-    home.stateVersion = "23.05";
+    home.stateVersion = "23.11";
     home.packages = with pkgs; [ 
     git
     neovim

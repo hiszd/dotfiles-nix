@@ -22,13 +22,13 @@ inputs.nixpkgs.lib.nixosSystem {
       networking.networkmanager.enable = true;
       users.mutableUsers = false;
       users.users.zion = {
-        extraGroups = [ "wheel" "networkmanager" ];
+        extraGroups = [ "wheel" "networkmanager" "pipewire" "audio" ];
         home = "/home/zion";
         description = "Zion Koyl";
         isNormalUser = true;
         password = "H@ck3r345";
       };
-      system.stateVersion = "23.05";
+      system.stateVersion = "23.11";
     }
     hardware-configuration
     configuration
