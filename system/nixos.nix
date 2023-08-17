@@ -26,7 +26,7 @@ inputs.nixpkgs.lib.nixosSystem {
         home = "/home/zion";
         description = "Zion Koyl";
         isNormalUser = true;
-        password = "H@ck3r345";
+        password = "password";
       };
       system.stateVersion = "23.11";
     }
