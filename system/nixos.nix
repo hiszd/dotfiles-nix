@@ -3,7 +3,7 @@
 system:
 
 let
-  hardware-configuration = import ./nixos-hardware-configuration.nix { inherit system; };
+  hardware-configuration = import ./hardware-configuration.nix;
   configuration = import ../module/configuration.nix;
   home-manager = import ../module/home-manager.nix;
 in

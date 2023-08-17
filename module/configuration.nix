@@ -50,6 +50,8 @@
     mp4v2
     openh264
     ffmpegthumbnailer
+    rdesktop
+    killall
     ] ++ ( with ocamlPackages;
       [
         ocaml
@@ -62,7 +64,7 @@
         ocaml-lsp
       ]);
 
-  fonts.fonts = with pkgs; [
+  fonts.packages = with pkgs; [
   (nerdfonts.override { fonts = [ "FiraCode" ]; })
   ];
 
