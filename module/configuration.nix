@@ -1,8 +1,7 @@
-{inputs, pkgs, run-cmd, ...}:
+{inputs, pkgs, ...}:
 {
 
   environment.systemPackages = with pkgs; [
-    neovim
     kitty
     git
     wget
@@ -52,6 +51,10 @@
     ffmpegthumbnailer
     rdesktop
     killall
+    openvpn
+    lua-language-server
+    cifs-utils
+    nil
     ] ++ ( with ocamlPackages;
       [
         ocaml
@@ -166,10 +169,5 @@
     #   enable = true;
     #   hidpi = true;
     # };
-  };
-
-  programs.neovim = {
-    enable = true;
-    defaultEditor = true;
   };
 }

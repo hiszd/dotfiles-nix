@@ -1,4 +1,4 @@
-{ pkgs, inputs, ... }:
+{ pkgs, ... }:
 
 {
   imports = [ <home-manager/nixos> ];
@@ -8,14 +8,27 @@
     home.stateVersion = "23.11";
     home.packages = with pkgs; [ 
     git
-    neovim
     wget
     rustup
     hyprland
     ];
 
     programs.neovim = {
-      extraConfig = pkgs.lib.fileContents /home/zion/.config/nvim/init.lua;
+      enable = true;
+      defaultEditor = true;
     };
+
+    # TODO:
+    # Need to write config as plugin, or find better way to source git repo
+
+    # programs.neovim = let nvimcfg = builtins.fetchGit {
+    #   url = "https://github.com/hiszd/.dot-files-nvim";
+    #   ref = "nix";
+    # };
+    # in {
+    #   extraConfig = ":luafile ${nvimcfg.outPath}/init.lua";
+    #   defaultEditor= true;
+    #   enable = true;
+    # };
   };
 }
