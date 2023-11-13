@@ -5,13 +5,7 @@
 
   # add home-manager user settings here
   home-manager.users.zion = {
-    home.stateVersion = "23.11";
-    home.packages = with pkgs; [ 
-    git
-    wget
-    rustup
-    hyprland
-    ];
+    home.stateVersion = "23.05";
 
     programs.neovim = {
       enable = true;

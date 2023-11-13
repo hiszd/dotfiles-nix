@@ -1,8 +1,23 @@
-{inputs, pkgs, ...}:
+{inputs, config, pkgs, ...}:
+  let
+  unstableTarball =
+    fetchTarball
+      "https://github.com/NixOS/nixpkgs/archive/refs/heads/nixos-unstable.tar.gz";
+in
 {
+
+  nixpkgs.config = {
+    packageOverrides = pkgs: {
+      unstable = import unstableTarball {
+        config = config.nixpkgs.config;
+      };
+    };
+  };
 
   environment.systemPackages = with pkgs; [
     kitty
+    unstable.wezterm
+    unstable.wezterm.terminfo
     git
     wget
     ripgrep
@@ -13,7 +28,7 @@
     dune_3
     opam
     ocamlformat
-    firefox
+    firefox-devedition
     polkit_gnome
     ffmpeg
     viewnior
@@ -39,7 +54,7 @@
     home-manager
     # linuxKernel.packages.linux_zen.nvidia_x11
     gparted
-    eww-wayland
+    unstable.eww-wayland
     sway
     nerdfonts
     pipewire
@@ -55,6 +70,9 @@
     lua-language-server
     cifs-utils
     nil
+    gimp
+    ntfs3g
+    acpi
     ] ++ ( with ocamlPackages;
       [
         ocaml
@@ -67,8 +85,12 @@
         ocaml-lsp
       ]);
 
-  fonts.packages = with pkgs; [
-  (nerdfonts.override { fonts = [ "FiraCode" ]; })
+  environment.sessionVariables = {
+    XDG_DATA_HOME = "$HOME/.local/share";
+  };
+
+  fonts.fonts = with pkgs; [
+  (nerdfonts.override { fonts = [ "FiraCode" "NerdFontsSymbolsOnly" ]; })
   ];
 
   security.rtkit.enable = true;
@@ -128,7 +150,6 @@
     LC_TIME = "en_US.UTF-8";
   };
 
-  users.users.zion.shell = pkgs.fish;
   users.defaultUserShell = pkgs.fish;
 
 # Allow unfree packages
@@ -161,10 +182,10 @@
   };
   programs.git.enable = true;
   programs.fish.enable = true;
-  programs.hyprland = {
+    programs.hyprland = {
     enable = true;
     package = inputs.hyprland.packages.${pkgs.system}.hyprland;
-    enableNvidiaPatches = false;
+    # enableNvidiaPatches = false;
     # xwayland = {
     #   enable = true;
     #   hidpi = true;

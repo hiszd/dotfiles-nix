@@ -23,12 +23,11 @@ inputs.nixpkgs.lib.nixosSystem {
       users.mutableUsers = false;
       users.users.zion = {
         extraGroups = [ "wheel" "networkmanager" "pipewire" "audio" ];
-        home = "/home/zion";
         description = "Zion Koyl";
         isNormalUser = true;
-        password = builtins.readFile /home/zion/.nix-creds;
+        passwordFile = "/home/zion/.nix-creds";
       };
-      system.stateVersion = "23.11";
+      system.stateVersion = "23.05";
     }
     hardware-configuration
     configuration
