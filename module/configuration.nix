@@ -16,8 +16,8 @@ in
 
   environment.systemPackages = with pkgs; [
     kitty
-    unstable.wezterm
     unstable.wezterm.terminfo
+    unstable.grimblast
     git
     wget
     ripgrep
@@ -69,6 +69,7 @@ in
     openvpn
     lua-language-server
     cifs-utils
+    unstable.codeium
     nil
     gimp
     ntfs3g
@@ -91,6 +92,7 @@ in
 
   fonts.fonts = with pkgs; [
   (nerdfonts.override { fonts = [ "FiraCode" "NerdFontsSymbolsOnly" ]; })
+  inter
   ];
 
   security.rtkit.enable = true;

@@ -5,7 +5,7 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-23.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     hyprland.url = "github:hyprwm/Hyprland";
-    wezterm.url = "github:wez/wezterm";
+    # wezterm.url = "github:wez/wezterm";
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
   };
 
