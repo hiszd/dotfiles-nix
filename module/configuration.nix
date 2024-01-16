@@ -14,10 +14,18 @@ in
     };
   };
 
+  nixpkgs.overlays = [
+    (import (builtins.fetchTarball "https://github.com/nix-community/neovim-nightly-overlay/archive/master.tar.gz"
+    ))
+  ];
+
   environment.systemPackages = with pkgs; [
+    neovim-nightly
+    floorp
     kitty
     unstable.wezterm.terminfo
     unstable.grimblast
+    gnumake
     git
     wget
     ripgrep
@@ -74,6 +82,9 @@ in
     gimp
     ntfs3g
     acpi
+    go
+    libpqxx
+    postgresql
     ] ++ ( with ocamlPackages;
       [
         ocaml
@@ -90,7 +101,7 @@ in
     XDG_DATA_HOME = "$HOME/.local/share";
   };
 
-  fonts.fonts = with pkgs; [
+  fonts.packages = with pkgs; [
   (nerdfonts.override { fonts = [ "FiraCode" "NerdFontsSymbolsOnly" ]; })
   inter
   ];

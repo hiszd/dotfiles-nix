@@ -25,9 +25,9 @@ inputs.nixpkgs.lib.nixosSystem {
         extraGroups = [ "wheel" "networkmanager" "pipewire" "audio" ];
         description = "Zion Koyl";
         isNormalUser = true;
-        passwordFile = "/home/zion/.nix-creds";
+        hashedPasswordFile = "/home/zion/.nix-creds";
       };
-      system.stateVersion = "23.05";
+      system.stateVersion = "23.11";
     }
     hardware-configuration
     configuration
