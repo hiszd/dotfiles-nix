@@ -5,7 +5,7 @@ system:
 let
   hardware-configuration = import ./hardware-configuration.nix;
   configuration = import ../module/configuration.nix;
-  home-manager = import ../module/home-manager.nix;
+  # home-manager = import ../module/home-manager.nix;
 in
 inputs.nixpkgs.lib.nixosSystem {
   system = system;
@@ -31,7 +31,7 @@ inputs.nixpkgs.lib.nixosSystem {
     }
     hardware-configuration
     configuration
-    home-manager
+    # home-manager
     # add more nix modules here
   ];
 }

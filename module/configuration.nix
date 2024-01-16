@@ -1,18 +1,18 @@
-{inputs, config, pkgs, ...}:
+{config, pkgs, ...}:
   let
   unstableTarball =
     fetchTarball
       "https://github.com/NixOS/nixpkgs/archive/refs/heads/nixos-unstable.tar.gz";
 in
 {
-
   nixpkgs.config = {
-    packageOverrides = pkgs: {
-      unstable = import unstableTarball {
-        config = config.nixpkgs.config;
+      packageOverrides = pkgs: {
+        vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
+        unstable = import unstableTarball {
+          config = config.nixpkgs.config;
+        };
       };
     };
-  };
 
   nixpkgs.overlays = [
     (import (builtins.fetchTarball "https://github.com/nix-community/neovim-nightly-overlay/archive/master.tar.gz"
@@ -22,6 +22,7 @@ in
   environment.systemPackages = with pkgs; [
     neovim-nightly
     floorp
+    postgres-lsp
     kitty
     unstable.wezterm.terminfo
     unstable.grimblast
@@ -60,7 +61,7 @@ in
     tmux
     tmuxinator
     home-manager
-    # linuxKernel.packages.linux_zen.nvidia_x11
+    linuxKernel.packages.linux_zen.nvidia_x11
     gparted
     unstable.eww-wayland
     sway
@@ -124,25 +125,36 @@ in
           user = "zion";
         };
     };
-    # videoDrivers = [ "nvidia" ];
+    videoDrivers = [ "nvidia" ];
   };
-  hardware.opengl.enable = true;
-  # hardware.nvidia.modesetting.enable = true;
+
+  hardware.nvidia = {
+    modesetting.enable = true;
+    powerManagement.enable = false;
+    powerManagement.finegrained = false;
+    open = false;
+    nvidiaSettings = true;
+    package = config.boot.kernelPackages.nvidiaPackages.beta;
+    prime = {
+      sync.enable = true;
+      nvidiaBusId = "PCI:1:0:0";
+      amdgpuBusId = "PCI:14:0:0";
+      };
+  };
   programs.xwayland.enable = true;
 
-  # nixpkgs.config.packageOverrides = pkgs: {
-  #   vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
-  # };
-  # hardware.opengl = {
-  #   enable = true;
-  #   extraPackages = with pkgs; [
-  #     intel-media-driver # LIBVA_DRIVER_NAME=iHD
-  #     vaapiIntel         # LIBVA_DRIVER_NAME=i965 (older but works better for Firefox/Chromium)
-  #     vaapiVdpau
-  #     libvdpau-va-gl
-  #     libva
-  #   ];
-  # };
+  hardware.opengl = {
+    enable = true;
+    driSupport = true;
+    driSupport32Bit = true;
+    # extraPackages = with pkgs; [
+    #   intel-media-driver # LIBVA_DRIVER_NAME=iHD
+    #   vaapiIntel         # LIBVA_DRIVER_NAME=i965 (older but works better for Firefox/Chromium)
+    #   vaapiVdpau
+    #   libvdpau-va-gl
+    #   libva
+    # ];
+  };
 
 # Set your time zone.
   time.timeZone = "America/Detroit";
@@ -197,11 +209,10 @@ in
   programs.fish.enable = true;
     programs.hyprland = {
     enable = true;
-    package = inputs.hyprland.packages.${pkgs.system}.hyprland;
-    # enableNvidiaPatches = false;
-    # xwayland = {
-    #   enable = true;
-    #   hidpi = true;
-    # };
+    package = pkgs.unstable.hyprland;
+    enableNvidiaPatches = false;
+    xwayland = {
+      enable = true;
+    };
   };
 }

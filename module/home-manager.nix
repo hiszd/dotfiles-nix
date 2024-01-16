@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ ... }:
 
 {
   imports = [ <home-manager/nixos> ];
@@ -7,7 +7,7 @@
   home-manager.users.zion = {
     home.stateVersion = "23.11";
 
-    # programs.neovim = {
+    # programs.neovim-nightly = {
     #   enable = true;
     #   defaultEditor = true;
     # };
