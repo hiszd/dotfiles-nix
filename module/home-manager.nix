@@ -7,7 +7,7 @@
   home-manager.users.zion = {
     home.stateVersion = "23.11";
 
-    # programs.neovim-nightly = {
+    # programs.neovim = {
     #   enable = true;
     #   defaultEditor = true;
     # };

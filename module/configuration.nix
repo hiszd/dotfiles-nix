@@ -20,6 +20,8 @@ in
   ];
 
   environment.systemPackages = with pkgs; [
+    lightdm
+    lightdm-slick-greeter
     neovim-nightly
     floorp
     postgres-lsp
@@ -120,10 +122,12 @@ in
   services.xserver = {
     enable = true;
     displayManager = { 
-      autoLogin = {
-          enable = true;
-          user = "zion";
-        };
+      defaultSession = "hyprland";
+      lightdm = {
+        enable = true;
+        greeter.enable = true;
+        greeters.slick.enable = true;
+      };
     };
     videoDrivers = [ "nvidia" ];
   };
