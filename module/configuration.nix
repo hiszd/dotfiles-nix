@@ -1,11 +1,16 @@
 {inputs, config, pkgs, ...}:
-  let
-  unstableTarball =
-    fetchTarball
-      "https://github.com/NixOS/nixpkgs/archive/refs/heads/nixos-unstable.tar.gz";
+let
+unstableTarball =
+fetchTarball
+"https://github.com/NixOS/nixpkgs/archive/refs/heads/nixos-unstable.tar.gz";
+in
+let
+  nixpkgs-sources =
+    builtins.fetchTarball
+      "https://github.com/nix-ocaml/nix-overlays/archive/master.tar.gz";
+  ocaml-pkgs = import nixpkgs-sources { };
 in
 {
-
   nixpkgs.config = {
     packageOverrides = pkgs: {
       unstable = import unstableTarball {
@@ -15,11 +20,16 @@ in
   };
 
   nixpkgs.overlays = [
-    (import (builtins.fetchTarball "https://github.com/nix-community/neovim-nightly-overlay/archive/master.tar.gz"
-    ))
+    # (import (builtins.fetchTarball "https://github.com/nix-ocaml/nix-overlays/archive/master.tar.gz"))
+    (import (builtins.fetchTarball "https://github.com/nix-community/neovim-nightly-overlay/archive/master.tar.gz"))
   ];
 
   environment.systemPackages = with pkgs; [
+    fzf
+    unzip
+    zip
+    bc
+    spotify-player
     neovim-nightly
     floorp
     kitty
@@ -31,11 +41,8 @@ in
     ripgrep
     chromium
     gcc
-    nodejs
-    ocaml
-    dune_3
-    opam
-    ocamlformat
+    nodejs_21
+    nodePackages_latest.prettier
     firefox-devedition
     polkit_gnome
     ffmpeg
@@ -85,9 +92,13 @@ in
     go
     libpqxx
     postgresql
-    ] ++ ( with ocamlPackages;
+    vscode-langservers-extracted
+    ] ++ ( with ocaml-pkgs.ocamlPackages_latest;
       [
+        dune_3
+        opam
         ocaml
+        ocamlformat
         core
         core_extended
         findlib

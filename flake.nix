@@ -2,10 +2,14 @@
   description = "Example kickstart Nix development setup.";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     hyprland.url = "github:hyprwm/Hyprland";
     # wezterm.url = "github:wez/wezterm";
+    ocaml-overlay = {
+      url = "github:nix-ocaml/nix-overlays";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs@{ self, hyprland, home-manager, nixpkgs, ... }:

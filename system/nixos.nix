@@ -27,7 +27,7 @@ inputs.nixpkgs.lib.nixosSystem {
         isNormalUser = true;
         hashedPasswordFile = "/home/zion/.nix-creds";
       };
-      system.stateVersion = "23.11";
+      system.stateVersion = "24.05";
     }
     hardware-configuration
     configuration
