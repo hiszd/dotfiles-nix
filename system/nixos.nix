@@ -22,7 +22,7 @@ inputs.nixpkgs.lib.nixosSystem {
       networking.networkmanager.enable = true;
       users.mutableUsers = false;
       users.users.zion = {
-        extraGroups = [ "wheel" "networkmanager" "pipewire" "audio" ];
+        extraGroups = [ "wheel" "networkmanager" "pipewire" "audio" "lightdm" ];
         description = "Zion Koyl";
         isNormalUser = true;
         hashedPasswordFile = "/home/zion/.nix-creds";
