@@ -231,7 +231,6 @@ in
     programs.hyprland = {
     enable = true;
     package = pkgs.unstable.hyprland;
-    enableNvidiaPatches = false;
     xwayland = {
       enable = true;
     };
