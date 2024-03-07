@@ -31,6 +31,7 @@ in
     zip
     bc
     spotify-player
+    sddm-chili-theme
     neovim-nightly
     floorp
     postgres-lsp
@@ -133,10 +134,16 @@ in
     enable = true;
     displayManager = { 
       defaultSession = "hyprland";
-      lightdm = {
+      sddm = {
         enable = true;
-        greeter.enable = true;
-        greeters.slick.enable = true;
+        theme = "chili";
+        wayland.enable = true;
+        # settings = {
+        #   Autologin = {
+        #     Session = "hyprland";
+        #     User = "zion";
+        #   };
+        # };
       };
     };
     videoDrivers = [ "nvidia" ];
