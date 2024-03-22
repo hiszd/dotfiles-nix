@@ -18,7 +18,8 @@
     in
     {
       nixosConfigurations = {
-        noizos = nixos-system "x86_64-linux";
+        noizos = nixos-system "noizos";
+        ZGamePC = nixos-system "ZGamePC";
       };
     };
 }

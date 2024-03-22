@@ -26,6 +26,7 @@ in
   ];
 
   environment.systemPackages = with pkgs; [
+    yadm
     fzf
     unzip
     zip
@@ -72,7 +73,7 @@ in
     home-manager
     linuxKernel.packages.linux_zen.nvidia_x11
     gparted
-    unstable.eww-wayland
+    unstable.eww
     sway
     nerdfonts
     pipewire
