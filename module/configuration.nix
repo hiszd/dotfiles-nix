@@ -47,11 +47,12 @@ in
     gcc
     nodejs_21
     nodePackages_latest.prettier
-    firefox-devedition
+    unstable.firefox-devedition
     polkit_gnome
     ffmpeg
     viewnior
     rofi
+    pamixer
     pavucontrol
     xfce.thunar
     starship
@@ -97,6 +98,7 @@ in
     libpqxx
     postgresql
     vscode-langservers-extracted
+    libva-utils
     ] ++ ( with ocaml-pkgs.ocamlPackages_latest;
       [
         dune_3
@@ -113,6 +115,7 @@ in
       ]);
 
   environment.sessionVariables = {
+    LIBVA_DRIVER_NAME = "iHD";
     XDG_DATA_HOME = "$HOME/.local/share";
   };
 
@@ -130,6 +133,8 @@ in
     # If you want to use JACK applications, uncomment this
     jack.enable = true;
   };
+
+  services.flatpak.enable = true;
 
   services.xserver = {
     enable = true;
@@ -169,13 +174,14 @@ in
     enable = true;
     driSupport = true;
     driSupport32Bit = true;
-    # extraPackages = with pkgs; [
-    #   intel-media-driver # LIBVA_DRIVER_NAME=iHD
-    #   vaapiIntel         # LIBVA_DRIVER_NAME=i965 (older but works better for Firefox/Chromium)
-    #   vaapiVdpau
-    #   libvdpau-va-gl
-    #   libva
-    # ];
+    extraPackages = with pkgs; [
+      intel-media-driver 
+      intel-vaapi-driver
+      nvidia-vaapi-driver
+      vaapiVdpau
+      libvdpau-va-gl
+      libva
+    ];
   };
 
 # Set your time zone.

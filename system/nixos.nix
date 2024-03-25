@@ -3,9 +3,9 @@
 hostname:
 
 let
+  network-drives = import ./network-drives.nix;
   hardware-configuration = import ./hardware-configuration.nix;
   configuration = import ../module/configuration.nix;
-  # home-manager = import ../module/home-manager.nix;
 in
 inputs.nixpkgs.lib.nixosSystem {
   system = "x86_64-linux";
@@ -29,9 +29,9 @@ inputs.nixpkgs.lib.nixosSystem {
       };
       system.stateVersion = "24.05";
     }
+    network-drives
     hardware-configuration
     configuration
-    # home-manager
     # add more nix modules here
   ];
 }

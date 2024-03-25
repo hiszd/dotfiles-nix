@@ -3,7 +3,6 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    home-manager.inputs.nixpkgs.follows = "nixpkgs";
     hyprland.url = "github:hyprwm/Hyprland";
     # wezterm.url = "github:wez/wezterm";
     ocaml-overlay = {
@@ -12,13 +11,14 @@
     };
   };
 
-  outputs = inputs@{ self, hyprland, home-manager, nixpkgs, ... }:
+  outputs = inputs@{ self, hyprland, nixpkgs, ... }:
     let
       nixos-system = import ./system/nixos.nix { inherit inputs; };
     in
     {
       nixosConfigurations = {
         noizos = nixos-system "noizos";
+        ZWorkLap = nixos-system "ZWorkLap";
         ZGamePC = nixos-system "ZGamePC";
       };
     };
