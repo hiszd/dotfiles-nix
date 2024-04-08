@@ -1,31 +1,17 @@
-{inputs, config, pkgs, ...}:
-let
-unstableTarball =
-fetchTarball
-"https://github.com/NixOS/nixpkgs/archive/refs/heads/nixos-unstable.tar.gz";
-in
-let
-  nixpkgs-sources =
-    builtins.fetchTarball
-      "https://github.com/nix-ocaml/nix-overlays/archive/master.tar.gz";
-  ocaml-pkgs = import nixpkgs-sources { };
-in
+{ config, pkgs, ...}:
 {
   nixpkgs.config = {
       packageOverrides = pkgs: {
         vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
-        unstable = import unstableTarball {
-          config = config.nixpkgs.config;
-        };
       };
     };
 
   nixpkgs.overlays = [
-    # (import (builtins.fetchTarball "https://github.com/nix-ocaml/nix-overlays/archive/master.tar.gz"))
     (import (builtins.fetchTarball "https://github.com/nix-community/neovim-nightly-overlay/archive/master.tar.gz"))
   ];
 
   environment.systemPackages = with pkgs; [
+    htop
     yadm
     fzf
     unzip
@@ -37,8 +23,8 @@ in
     floorp
     postgres-lsp
     kitty
-    unstable.wezterm.terminfo
-    unstable.grimblast
+    wezterm.terminfo
+    grimblast
     gnumake
     git
     wget
@@ -47,7 +33,7 @@ in
     gcc
     nodejs_21
     nodePackages_latest.prettier
-    unstable.firefox-devedition
+    firefox-devedition
     polkit_gnome
     ffmpeg
     viewnior
@@ -74,7 +60,7 @@ in
     home-manager
     linuxKernel.packages.linux_zen.nvidia_x11
     gparted
-    unstable.eww
+    eww
     sway
     nerdfonts
     pipewire
@@ -89,7 +75,7 @@ in
     openvpn
     lua-language-server
     cifs-utils
-    unstable.codeium
+    codeium
     nil
     gimp
     ntfs3g
@@ -99,7 +85,7 @@ in
     postgresql
     vscode-langservers-extracted
     libva-utils
-    ] ++ ( with ocaml-pkgs.ocamlPackages_latest;
+    ] ++ ( with pkgs.ocamlPackages_latest;
       [
         dune_3
         opam
@@ -223,11 +209,11 @@ in
       experimental-features = [ "nix-command" "flakes" ];
       substituters = [
         "https://hyprland.cachix.org"
-        "https://nix-community.cachix.org"
+          "https://nix-community.cachix.org"
       ];
       trusted-public-keys = [
         "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
-        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+          "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       ];
       trusted-users = [ "@wheel" ];
       warn-dirty = false;
@@ -235,9 +221,9 @@ in
   };
   programs.git.enable = true;
   programs.fish.enable = true;
-    programs.hyprland = {
+  programs.hyprland = {
     enable = true;
-    package = pkgs.unstable.hyprland;
+    package = pkgs.hyprland;
     xwayland = {
       enable = true;
     };

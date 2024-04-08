@@ -1,14 +1,9 @@
 {
-  description = "Example kickstart Nix development setup.";
+  description = "My personal flake";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:nix-ocaml/nix-overlays";
     hyprland.url = "github:hyprwm/Hyprland";
-    # wezterm.url = "github:wez/wezterm";
-    ocaml-overlay = {
-      url = "github:nix-ocaml/nix-overlays";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   outputs = inputs@{ self, hyprland, nixpkgs, ... }:
