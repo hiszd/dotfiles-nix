@@ -1,17 +1,13 @@
-{ config, pkgs, ...}:
+{config, inputs,...}:
+let pkgs = import inputs.nixpkgs {}; in
 {
   nixpkgs.config = {
-      packageOverrides = pkgs: {
-        vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
-      };
+    packageOverrides = pkgs: {
+      vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
     };
-
-  nixpkgs.overlays = [
-    (import (builtins.fetchTarball "https://github.com/nix-community/neovim-nightly-overlay/archive/master.tar.gz"))
-  ];
+  };
 
   environment.systemPackages = with pkgs; [
-    htop
     yadm
     fzf
     unzip
@@ -19,7 +15,7 @@
     bc
     spotify-player
     sddm-chili-theme
-    neovim-nightly
+    neovim
     floorp
     postgres-lsp
     kitty
@@ -209,11 +205,11 @@
       experimental-features = [ "nix-command" "flakes" ];
       substituters = [
         "https://hyprland.cachix.org"
-          "https://nix-community.cachix.org"
+        "https://nix-community.cachix.org"
       ];
       trusted-public-keys = [
         "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
-          "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       ];
       trusted-users = [ "@wheel" ];
       warn-dirty = false;
@@ -221,7 +217,7 @@
   };
   programs.git.enable = true;
   programs.fish.enable = true;
-  programs.hyprland = {
+    programs.hyprland = {
     enable = true;
     package = pkgs.hyprland;
     xwayland = {

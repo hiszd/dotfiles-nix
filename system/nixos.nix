@@ -6,6 +6,7 @@ let
   network-drives = import ./network-drives.nix;
   hardware-configuration = import ./hardware-configuration.nix;
   configuration = import ../module/configuration.nix;
+  overlays = import ../overlays;
 in
 inputs.nixpkgs.lib.nixosSystem {
   system = "x86_64-linux";
@@ -29,6 +30,7 @@ inputs.nixpkgs.lib.nixosSystem {
       };
       system.stateVersion = "24.05";
     }
+    overlays
     network-drives
     hardware-configuration
     configuration
