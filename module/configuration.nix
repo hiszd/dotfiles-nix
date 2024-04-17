@@ -1,5 +1,13 @@
 {config, inputs,...}:
 let pkgs = import inputs.nixpkgs {}; in
+let my-rules = pkgs.writeTextFile {
+  name = "50-hiszd-keeb-rules.rules";
+  text = ''
+    SUBSYSTEMS=="usb", ATTRS{manufacturer}=="HisZd", GROUP="users", TAG+="uaccess"
+    '';
+  destination = "/etc/udev/rules.d/50-hiszd-keeb-rules.rules";
+};
+in
 {
   nixpkgs.config = {
     packageOverrides = pkgs: {
@@ -81,6 +89,8 @@ let pkgs = import inputs.nixpkgs {}; in
     postgresql
     vscode-langservers-extracted
     libva-utils
+    libxkbcommon
+    xorg.setxkbmap
     ] ++ ( with pkgs.ocamlPackages_latest;
       [
         dune_3
@@ -105,6 +115,34 @@ let pkgs = import inputs.nixpkgs {}; in
   (nerdfonts.override { fonts = [ "FiraCode" "NerdFontsSymbolsOnly" ]; })
   inter
   ];
+
+  services.udev.packages = [ my-rules ];
+
+  systemd.services.hid-io = {
+    enable = true;
+    description = "HID IO";
+    path = with pkgs; [
+      xorg.setxkbmap
+    ];
+    serviceConfig = {
+      ExecStart = "/home/zion/.local/bin/hid-io-core";
+      User = "zion";
+    };
+    wantedBy = [ "hid-io-ergoone.target" ];
+  };
+
+  systemd.services.hid-io-ergoone = {
+    enable = true;
+    description = "HID IO ErgoOne";
+    path = with pkgs; [
+      pamixer
+    ];
+    serviceConfig = {
+      ExecStart = "/home/zion/.local/bin/hid-io-ergoone";
+      User = "zion";
+    };
+    wantedBy = [ "default.target" ];
+  };
 
   security.rtkit.enable = true;
   services.pipewire = {
