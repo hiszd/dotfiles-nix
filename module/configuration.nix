@@ -16,6 +16,8 @@ in
   };
 
   environment.systemPackages = with pkgs; [
+    bluez
+    pulseaudio
     yadm
     fzf
     unzip
