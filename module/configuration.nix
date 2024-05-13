@@ -130,7 +130,8 @@ in
       ExecStart = "/home/zion/.local/bin/hid-io-core";
       User = "zion";
     };
-    wantedBy = [ "hid-io-ergoone.target" ];
+    # wantedBy = [ "hid-io-ergoone.target" ];
+    wantedBy = [ "default.target" ];
   };
 
   systemd.services.hid-io-ergoone = {
