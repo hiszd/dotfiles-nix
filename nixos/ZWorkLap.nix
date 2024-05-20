@@ -19,9 +19,15 @@
 
     # You can also split up your configuration and import pieces of it here:
     # ./users.nix
+    (
+      import ./packages/ZWorkLap.nix { inherit pkgs inputs outputs; }
+    )
+    (
+      import ./services/ZWorkLap.nix { inherit pkgs config; }
+    )
 
     # Import your generated (nixos-generate-config) hardware configuration
-    ./hardware-configuration.nix
+    ./ZWorkLap-hardware.nix
   ];
 
   nixpkgs = {
@@ -30,7 +36,8 @@
       # Add overlays your own flake exports (from overlays and pkgs dir):
       outputs.overlays.additions
       outputs.overlays.modifications
-      inputs.neovim-nightly-overlay.overlay
+      outputs.overlays.ocaml-packages
+      outputs.overlays.neovim-nightly
 
       # You can also add overlays exported from other flakes:
       # neovim-nightly-overlay.overlays.default
@@ -68,38 +75,26 @@
     nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
   };
 
-  boot.loader.systemd-boot.enable = true;
       boot.loader.efi.canTouchEfiVariables = true;
       security.sudo.enable = true;
       security.sudo.wheelNeedsPassword = false;
-      services.openssh.enable = true;
-      networking.hostName = hostname; 
       networking.networkmanager.enable = true;
-      users.mutableUsers = false;
 
-  # FIXME: Add the rest of your current configuration
+  networking.hostName = "ZWorkLap";
 
-  # TODO: Set your hostname
-  networking.hostName = "your-hostname";
-
-  # TODO: Configure your system-wide user settings (groups, etc), add more users as needed.
-  users = 
+  users = {
     mutableUsers = false;
     users = {
-      # FIXME: Replace with your username
       zion = {
         description = "Zion Koyl";
-        # TODO: You can set an initial password for your user.
-        # If you do, you can skip setting a root password by passing '--no-root-passwd' to nixos-install.
-        # Be sure to change it (using passwd) after rebooting!
         initialPassword = "correcthorsebatterystaple";
         hashedPasswordFile = "/home/zion/.nix-creds";
         isNormalUser = true;
         openssh.authorizedKeys.keys = [
           # TODO: Add your SSH public key(s) here, if you plan on using SSH to connect
         ];
-        # TODO: Be sure to add any other groups you need (such as networkmanager, audio, docker, etc)
         extraGroups = [ "wheel" "networkmanager" "pipewire" "audio" "lightdm" ];
+      };
     };
   };
 
@@ -112,7 +107,7 @@
       PermitRootLogin = "no";
       # Opinionated: use keys only.
       # Remove if you want to SSH using passwords
-      PasswordAuthentication = false;
+      PasswordAuthentication = true;
     };
   };
 

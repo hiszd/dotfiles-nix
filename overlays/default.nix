@@ -12,10 +12,10 @@
     # });
   };
 
-  # When applied, the unstable nixpkgs set (declared in the flake inputs) will
-  # be accessible through 'pkgs.unstable'
-  unstable-packages = final: _prev: {
-    unstable = import inputs.nixpkgs-unstable {
+  neovim-nightly = inputs.neovim-nightly-overlay.overlay;
+
+  ocaml-packages = final: _prev: {
+    ocaml-packages = import inputs.nixpkgs-ocaml {
       system = final.system;
       config.allowUnfree = true;
     };
