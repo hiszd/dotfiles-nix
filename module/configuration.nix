@@ -130,20 +130,6 @@ in
       ExecStart = "/home/zion/.local/bin/hid-io-core";
       User = "zion";
     };
-    # wantedBy = [ "hid-io-ergoone.target" ];
-    wantedBy = [ "default.target" ];
-  };
-
-  systemd.services.hid-io-ergoone = {
-    enable = true;
-    description = "HID IO ErgoOne";
-    path = with pkgs; [
-      pamixer
-    ];
-    serviceConfig = {
-      ExecStart = "/home/zion/.local/bin/hid-io-ergoone";
-      User = "zion";
-    };
     wantedBy = [ "default.target" ];
   };
 
