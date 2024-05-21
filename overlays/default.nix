@@ -12,7 +12,10 @@
     # });
   };
 
-  neovim-nightly = inputs.neovim-nightly-overlay.overlay;
+  # neovim-nightly = inputs.neovim-nightly-overlay.overlay;
+  neovim-nightly = (import (builtins.fetchTarball {
+    url = "https://github.com/nix-community/neovim-nightly-overlay/archive/master.tar.gz";
+  }));
 
   ocaml-packages = final: _prev: {
     ocaml-packages = import inputs.nixpkgs-ocaml {

@@ -8,28 +8,6 @@
   pkgs,
   ...
 }: {
-  # You can import other NixOS modules here
-  imports = [
-    # If you want to use modules your own flake exports (from modules/nixos):
-    # outputs.nixosModules.example
-
-    # Or modules from other flakes (such as nixos-hardware):
-    # inputs.hardware.nixosModules.common-cpu-amd
-    # inputs.hardware.nixosModules.common-ssd
-
-    # You can also split up your configuration and import pieces of it here:
-    # ./users.nix
-    (
-      import ./packages/ZWorkLap.nix { inherit pkgs inputs outputs; }
-    )
-    (
-      import ./services/ZWorkLap.nix { inherit pkgs config; }
-    )
-
-    # Import your generated (nixos-generate-config) hardware configuration
-    ./ZWorkLap-hardware.nix
-  ];
-
   nixpkgs = {
     # You can add overlays here
     overlays = [
@@ -55,6 +33,122 @@
       allowUnfree = true;
     };
   };
+
+  environment.systemPackages = with pkgs; [
+    cachix
+    bluez
+    pulseaudio
+    yadm
+    fzf
+    unzip
+    zip
+    bc
+    spotify-player
+    sddm-chili-theme
+    neovim-nightly
+    floorp
+    postgres-lsp
+    kitty
+    wezterm.terminfo
+    grimblast
+    gnumake
+    git
+    wget
+    ripgrep
+    chromium
+    gcc
+    nodejs_22
+    nodePackages_latest.prettier
+    firefox-devedition
+    polkit_gnome
+    ffmpeg
+    viewnior
+    rofi
+    pamixer
+    pavucontrol
+    xfce.thunar
+    starship
+    wl-clipboard
+    wf-recorder
+    swaybg
+    ffmpegthumbnailer
+    xfce.tumbler
+    playerctl
+    xfce.thunar-archive-plugin
+    wlogout
+    gtklock
+    dunst
+    wofi
+    brightnessctl
+    hyprpicker
+    tmux
+    tmuxinator
+    linuxKernel.packages.linux_zen.nvidia_x11
+    gparted
+    eww
+    sway
+    nerdfonts
+    pipewire
+    qpwgraph
+    qjackctl
+    mpv
+    mp4v2
+    openh264
+    ffmpegthumbnailer
+    rdesktop
+    killall
+    openvpn
+    lua-language-server
+    cifs-utils
+    codeium
+    nil
+    gimp
+    ntfs3g
+    acpi
+    go
+    libpqxx
+    postgresql
+    vscode-langservers-extracted
+    libva-utils
+    libxkbcommon
+    xorg.setxkbmap
+    ] ++ ( with pkgs.ocaml-packages.ocamlPackages_latest;
+      [
+        dune_3
+        opam
+        ocaml
+        ocamlformat
+        core
+        core_extended
+        findlib
+        utop
+        merlin
+        ocp-indent
+        ocaml-lsp
+      ]);
+
+
+  # You can import other NixOS modules here
+  imports = [
+    # If you want to use modules your own flake exports (from modules/nixos):
+    # outputs.nixosModules.example
+
+    # Or modules from other flakes (such as nixos-hardware):
+    # inputs.hardware.nixosModules.common-cpu-amd
+    # inputs.hardware.nixosModules.common-ssd
+
+    # You can also split up your configuration and import pieces of it here:
+    # ./users.nix
+    (
+      import ./packages/ZWorkLap.nix { inherit pkgs inputs outputs; }
+    )
+    (
+      import ./services/ZWorkLap.nix { inherit pkgs config; }
+    )
+
+    # Import your generated (nixos-generate-config) hardware configuration
+    ./ZWorkLap-hardware.nix
+  ];
 
   nix = let
     flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
@@ -112,5 +206,5 @@
   };
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
-  system.stateVersion = "23.05";
+  system.stateVersion = "24.11";
 }
