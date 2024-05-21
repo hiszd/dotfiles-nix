@@ -34,99 +34,6 @@
     };
   };
 
-  environment.systemPackages = with pkgs; [
-    cachix
-    bluez
-    pulseaudio
-    yadm
-    fzf
-    unzip
-    zip
-    bc
-    spotify-player
-    sddm-chili-theme
-    neovim-nightly
-    floorp
-    postgres-lsp
-    kitty
-    wezterm.terminfo
-    grimblast
-    gnumake
-    git
-    wget
-    ripgrep
-    chromium
-    gcc
-    nodejs_22
-    nodePackages_latest.prettier
-    firefox-devedition
-    polkit_gnome
-    ffmpeg
-    viewnior
-    rofi
-    pamixer
-    pavucontrol
-    xfce.thunar
-    starship
-    wl-clipboard
-    wf-recorder
-    swaybg
-    ffmpegthumbnailer
-    xfce.tumbler
-    playerctl
-    xfce.thunar-archive-plugin
-    wlogout
-    gtklock
-    dunst
-    wofi
-    brightnessctl
-    hyprpicker
-    tmux
-    tmuxinator
-    linuxKernel.packages.linux_zen.nvidia_x11
-    gparted
-    eww
-    sway
-    nerdfonts
-    pipewire
-    qpwgraph
-    qjackctl
-    mpv
-    mp4v2
-    openh264
-    ffmpegthumbnailer
-    rdesktop
-    killall
-    openvpn
-    lua-language-server
-    cifs-utils
-    codeium
-    nil
-    gimp
-    ntfs3g
-    acpi
-    go
-    libpqxx
-    postgresql
-    vscode-langservers-extracted
-    libva-utils
-    libxkbcommon
-    xorg.setxkbmap
-    ] ++ ( with pkgs.ocaml-packages.ocamlPackages_latest;
-      [
-        dune_3
-        opam
-        ocaml
-        ocamlformat
-        core
-        core_extended
-        findlib
-        utop
-        merlin
-        ocp-indent
-        ocaml-lsp
-      ]);
-
 
   # You can import other NixOS modules here
   imports = [
@@ -139,15 +46,11 @@
 
     # You can also split up your configuration and import pieces of it here:
     # ./users.nix
-    (
-      import ./packages/ZWorkLap.nix { inherit pkgs inputs outputs; }
-    )
-    (
-      import ./services/ZWorkLap.nix { inherit pkgs config; }
-    )
+    ./packages/ZWorkLap.nix
+    ./services/ZWorkLap.nix
 
     # Import your generated (nixos-generate-config) hardware configuration
-    ./ZWorkLap-hardware.nix
+    /etc/nixos/hardware-configuration.nix
   ];
 
   nix = let
@@ -169,14 +72,15 @@
     nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
   };
 
-      boot.loader.efi.canTouchEfiVariables = true;
-      security.sudo.enable = true;
-      security.sudo.wheelNeedsPassword = false;
-      networking.networkmanager.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
+  security.sudo.enable = true;
+  security.sudo.wheelNeedsPassword = false;
+  networking.networkmanager.enable = true;
 
   networking.hostName = "ZWorkLap";
 
   users = {
+    defaultUserShell = pkgs.fish;
     mutableUsers = false;
     users = {
       zion = {

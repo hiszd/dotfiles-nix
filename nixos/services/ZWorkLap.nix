@@ -12,6 +12,9 @@ let my-rules = pkgs.writeTextFile {
 };
 in
 {
+
+  boot.loader.systemd-boot.enable = true;
+
   environment.sessionVariables = {
     LIBVA_DRIVER_NAME = "iHD";
     XDG_DATA_HOME = "$HOME/.local/share";
@@ -33,14 +36,28 @@ in
   };
 
   security.rtkit.enable = true;
-
   services.pipewire = {
     enable = true;
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
     jack.enable = true;
+    wireplumber.extraConfig = {
+      "monitor.bluez.properties" = {
+        "bluez5.enable-sbc-xq" = true;
+        "bluez5.enable-msbc" = true;
+        "bluez5.enable-hw-volume" = true;
+        "bluez5.roles" = [ "hsp_hs" "hsp_ag" "hfp_hf" "hfp_ag" ];
+      };
+    };
+    extraConfig.pipewire."92-low-latency" = {
+      context.properties = {
+        default.clock.rate = 48000;
+        default.clock.quantum = 32;
+        default.clock.min-quantum = 32;
+        default.clock.max-quantum = 32;
+      };
+    };
   };
 
   services.flatpak.enable = true;
