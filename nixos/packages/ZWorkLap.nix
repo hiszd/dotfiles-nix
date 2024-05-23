@@ -4,6 +4,9 @@
   ...
 }: {
   environment.systemPackages = with pkgs; [
+    inotify-tools
+    docker
+    docker-compose
     cachix
     bluez
     pulseaudio
