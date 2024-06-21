@@ -5,11 +5,13 @@
     # Nixpkgs
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-ocaml.url = "github:nix-ocaml/nix-overlays";
+    nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
   };
 
   outputs = {
     self,
     nixpkgs,
+    nixos-wsl,
     ...
   } @ inputs: let
     inherit (self) outputs;
@@ -43,6 +45,14 @@
     # NixOS configuration entrypoint
     # Available through 'nixos-rebuild --flake .#your-hostname'
     nixosConfigurations = {
+      WSL = nixpkgs.lib.nixosSystem {
+        specialArgs = {inherit inputs outputs nixpkgs;};
+        modules = [
+	  nixos-wsl.nixosModules.default
+          # > Our main nixos configuration file <
+          ./nixos/WSL.nix
+        ];
+      };
       ZWorkLap = nixpkgs.lib.nixosSystem {
         specialArgs = {inherit inputs outputs nixpkgs;};
         modules = [
