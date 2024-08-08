@@ -22,18 +22,18 @@ in
 
   services.udev.packages = [ my-rules ];
 
-  systemd.services.hid-io = {
-    enable = true;
-    description = "HID IO";
-    path = with pkgs; [
-      xorg.setxkbmap
-    ];
-    serviceConfig = {
-      ExecStart = "/home/zion/.local/bin/hid-io-core";
-      User = "zion";
-    };
-    wantedBy = [ "default.target" ];
-  };
+  # systemd.services.hid-io = {
+  #   enable = true;
+  #   description = "HID IO";
+  #   path = with pkgs; [
+  #     xorg.setxkbmap
+  #   ];
+  #   serviceConfig = {
+  #     ExecStart = "/home/zion/.local/bin/hid-io-core";
+  #     User = "zion";
+  #   };
+  #   wantedBy = [ "default.target" ];
+  # };
 
   security.rtkit.enable = true;
   services.pipewire = {
@@ -73,16 +73,21 @@ in
       enable = true;
       theme = "chili";
       wayland.enable = true;
-      # settings = {
-      #   Autologin = {
-      #     Session = "hyprland";
-      #     User = "zion";
-      #   };
-      # };
+      settings = {
+        Autologin = {
+          Session = "hyprland";
+          User = "zion";
+        };
+      };
     };
   };
   services.xserver = {
     videoDrivers = [ "nvidia" ];
+  };
+
+  services.xrdp.enable = true;
+  environment.variables = {
+    DISPLAY = ":10";
   };
 
   hardware.nvidia = {

@@ -4,6 +4,7 @@
   ...
 }: {
   environment.systemPackages = with pkgs; [
+    nix-direnv
     inotify-tools
     docker
     docker-compose
